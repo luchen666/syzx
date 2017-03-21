@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港口列表</title>
+<link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+<!-- jqgrid-->
+<link href="/admin/css/ui.jqgrid.css" rel="stylesheet">
+<link href="/admin/css/animate.min.css" rel="stylesheet">
+<link href="/admin/css/style.min.css" rel="stylesheet">
+<style>
+/* 删除但未选中时的错误提示框 */
+#alertmod_table_list_2{
+    position:absolute !important;
+    margin:0 auto !important;
+    color:#1a7bb9;
+    border:1px solid #1a7bb9;
+    font-size:18px;
+    width:400px !important;
+    top:344px !important;
+    left:628px !important;
+    background-color:#f5f5f5;
+}
+/*编辑模态框样式重写*/
+#editmodtable_list_2{
+    position:absolute !important;
+    top:186px !important;
+    left:578px !important;
+}
+/*搜索框样式重写*/
+#searchmodfbox_table_list_2{
+    position:absolute !important;
+    top:302px !important;
+    left:603px !important;
+}
+/*隐藏模态框*/
+#motaibox{
+    display:none;
+    z-index: 10;
+    position:absolute;
+    top:285px;
+    left:328px;
+    width:1000px;
+}
+</style>
+</head>
+<body class="gray-bg" style="overflow:hidden">
+<div class="animated fadeInRight">
+<div class="row modal-content" id="motaibox">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 class="title">港口详情</h5>
+                <div class="ibox-tools">
+                    <!-- 点击关闭港口详情 -->
+                    <a id="closeUserDetail">
+                         <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content" id="table-box">
+                <!-- table -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-content">
+                <h4 class="m-t">港口列表</h4>
+                <div class="jqGrid_wrapper">
+                    <table id="table_list_2"></table>
+                    <div id="pager_list_2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- 全局js -->
+<script src="/admin/js/jquery-2.1.1.min.js"></script>
+<script src="/admin/js/bootstrap.min.js"></script>
+
+<!-- jqGrid -->
+<script src="/admin/js/jqGrid/grid.locale-cn.js"></script>
+<script src="/admin/js/jqGrid/jquery.jqGrid.min.js"></script>
+
+<!-- 自定义js-->
+<script src="/admin/js/content.min.js"></script>
+<script>
+    $(document).ready(function()
+    {
+        $.jgrid.defaults.styleUI="Bootstrap";
+        $("#table_list_2").jqGrid({
+            url:"/admin/home/getPort",
+            datatype:"json",
+            height:700,
+            autowidth:true,
+            shrinkToFit:true,
+            rowNum:19,
+            colNames:["序号","港口名称","拼音","简拼","首字母","区域","描述"],
+            colModel:
+            [   //默认不可编辑 可搜索 可排序
+                //实现功能：增删改
+                //显示列：序号、港口名称、拼音、简拼、首字母、区域、描述
+                //可编辑：序号、港口名称、拼音、简拼、首字母、区域、描述
+                //隐藏列：无；
+                //必填项：序号、港口名称、区域
+                //可排序：序号 首字母
+                //可搜索：序号、港口名称、拼音、简拼、首字母、区域
+                {name:"ID",index:"ID",editable:false,sorttype:"int",key:true,width:20},
+                {name:"PortName",index:"PortName",editable:true,sortable:false,width:100,editrules:{required:true}},
+                {name:"Spell",index:"Spell",editable:true,sortable:false,width:100},
+                {name:"ShortSpell",index:"ShortSpell",editable:true,sortable:false,width:50},
+                {name:"FirstLetter",index:"FirstLetter",editable:true,width:30},
+                {name:"RegionId",index:"RegionId",editable:true,sortable:false,width:50,editrules:{required:true}},
+                {name:"Description",index:"Description",editable:true,search:false,sortable:false,width:120}
+            ],
+            multiselect:true,
+            loadonce:true,
+            pager:"#pager_list_2",
+            viewrecords:true,
+            editurl:'/admin/port/save'
+        });
+
+        $("#table_list_2").jqGrid("navGrid","#pager_list_2",{edit:true,add:true,del:true,search:true},{closeAfterEdit:true,reloadAfterSubmit:false},{closeAfterAdd:true,reloadAfterSubmit:false});
+
+        $(window).bind("resize",function(){var b=$(".jqGrid_wrapper").width();$("#table_list_2").setGridWidth(b)})
+    });
+
+    //添加方法 用户双击表格中每行弹出相应详情 非链接 模态框形式
+    $("#table_list_2").on('dblclick','tr',function(){
+        $("#motaibox").css("display","block");
+        var ID=$(this).children().next().attr("title");
+        $.ajax({
+            type:'GET',
+            url: '/admin/home/getonePort?ID='+ID,
+            success: function(res){
+              var onePort=JSON.parse(res).data;
+              //console.log(onePort);
+              var html='';
+              html=`<table class="table table-hover">
+                        <tr>
+                            <td>港口名称：${onePort.PortName}</td>
+                            <td>简&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拼：${onePort.ShortSpell}</td>
+                            <td>区&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;域：${onePort.RegionId}</td>
+                        </tr>
+                        <tr>
+                            <td>创&nbsp;&nbsp;建&nbsp;&nbsp;人：${onePort.CreateUserName}</td>
+                            <td>创建时间：${onePort.CreateDate}</td>
+                            <td>最后更新时间：${onePort.UpdateDate}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">描&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;述：${onePort.Description}</td>
+                        </tr>
+                    </table>`;
+                $('#table-box').html(html);
+            }
+        });
+    });
+
+    //用户点击关闭，关闭模态框
+     $("#closeUserDetail").click(function(){
+        $("#motaibox").css("display","none");
+     });
+</script>
+</body>
+</html>

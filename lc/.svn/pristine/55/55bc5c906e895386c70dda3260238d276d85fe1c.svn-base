@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:ng="http://angularjs.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Cache-Control" content="max-age=7200" />
+<meta name="renderer" content="webkit|ie-comp|ie-stand" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Expires" content="0" />
+<title>水运在线</title>
+<meta name="keywords" content="水运在线、船期、内贸船、散货船、航运、海运、查船期、找货、船东、货主、超级" />
+<meta name="description" content="水运在线、船期、内贸船、散货船、航运、海运、查船期、找货、船东、货主、超级" />
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/css/ucenter.css" />
+<link href="/images/logo.ico" rel="icon" type="image/x-ico" />
+
+</head>
+<body ng-app="index" ng-controller="dataCtrl">
+
+<div class="pageloading"><div>载入中 。。。</div></div>
+
+<!-- 头部菜单 -->
+<site-menu menu-index=100></site-menu>
+
+<div class="contentbox"><table width="100%" class="body"><tr><td class="left"><ucenter-guide></ucenter-guide></td><td width="10"></td><td dwidth="550" dclass="bgcolor-light">
+
+	<table width="100%"class="paydepositform"><tr><td width="400">
+		
+		<div>支付{{inq.State == STATE.ORDER ? "订金" : "尾款"}}</div>
+		<ul>
+		<li><span>帐户余额</span>￥ <label class="color-blue font-24px">{{acc.Balance}}</label> 元</li>
+		<li><span ng-bind="inq.State == STATE.ORDER ? '合同订金' : '订单尾款'"></span>
+			<input ng-if="inq.State == STATE.ORDER" type="number" ng-model="input.Money" placeholder="请输入合同订金">
+			<div ng-if="inq.State == STATE.DEPOSIT">￥<label class="color-blue font-24px" ng-bind="input.Money"></label> 元</div>
+		</li>
+		</ul>
+		
+	</td><td width="10"></td><td width="400">
+	
+		<div ng-show="input.Money == '' || input.Money <= acc.Balance || acc.Balance > 0">付款方式</div>
+		<ul ng-show="input.Money == '' || input.Money <= acc.Balance || acc.Balance > 0">
+			<li><span>付款方式</span><label class="color-blue font-24px">余额支付</label></li>
+			<li><span>支付密码</span><input type="password" ng-model="input.Password" placeholder="请输入支付密码"></li>
+		</ul>
+		
+		<div ng-show="acc.Balance == 0 && input.Money > acc.Balance">付款方式</div>
+		<ul ng-show="acc.Balance == 0 && input.Money > acc.Balance">
+			<li><span>付款方式</span><label class="color-blue font-24px">网银支付</label></li>
+			<li><span>开&nbsp;户&nbsp;行</span><select ng-model="input.BankCode" style="width:150px">
+					<option ng-repeat="b in bank" value="{{b.Code}}" ng-selected="input.BankCode == b.Code">{{ b.Name }}</option>
+				</select><select ng-model="input.CardType" style="width:100px">
+					<option value="C" ng-selected="input.CardType == 'C'">私人卡号</option>
+					<option value="B" ng-selected="input.CardType == 'B'">对公帐号</option>
+				</select>
+			</li>
+		</ul>
+
+	</td><td width="10"></td><td>	
+		<button ng-click="pay()"><i class="glyphicon glyphicon-hand-right"></i> 去支付</button>
+		<span style="font-size:11px;line-height:18px;display:block;margin-top:10px;">使用U盾的网银须用IE浏览器才能完成支付。支付后请刷新列表页。</span>
+	</td></tr></table>
+
+	<!--- 订单详情 --->
+	<div class="paydepositform"><div>订单详情</div></div>
+	
+	<div class="inqshow" style="height:100%;padding:0px;">
+	<div class="inqview">
+		<div class="r1">
+			<div>单号：<span ng-bind="inq.OrderNo == null ? '-' : inq.OrderNo"></span></div>
+			<div class="float-right"><i class="icon ion-compose font-18px"></i> <span ng-bind="inq.CreateDate | dateformat"></span></div>
+		</div>
+
+		<div class="r2"></div>
+		
+		<div class="r3">
+			<div class="port align-left"><span ng-bind="inq.FromRegion"></span><span ng-bind="inq.FromPortName"></span></div>
+			<div class="align-center">
+				<label><span ng-if="inq.SeaOrRiver == 1" class="color-navy">海运</span>
+					   <span ng-if="inq.SeaOrRiver == 0" class="color-calm">河运</span>
+				</label>
+				<label style="height:10px;"><img src="/images/arrow-r.png" style="width:100px;height:5px;position:relative;top:-10px;"></label>
+				<label>{{ inq.GoodsName }} {{ inq.Qty | numberformat:1 }}±{{ inq.QtyDeviation}}T</label>
+			</div>
+			<div class="port align-right"><span ng-bind="inq.ToRegion"></span><span ng-bind="inq.ToPortName"></span></div>
+		</div>
+
+		<div class="r4">
+			<div>
+				<i class="icon ion-android-calendar font-18px top2px color-orange"></i> 受载 &nbsp;
+				<label class="text-info" ng-bind="inq.LoadDateFrom | dateformat:'M月d日'"></label> - 
+				<label class="text-info" ng-bind="inq.LoadDateTo | dateformat:'M月d日'"></label>
+			</div>
+			<div class="float-right" ng-if="inq.Price==null||inq.Price==0"><label class="text-info">运价待定</label></div>
+			<div class="float-right" ng-if="inq.Price!=null&&inq.Price>0"><label class="text-info">￥{{inq.Price | numberformat:2 }}/吨</label>&nbsp;{{inq.TaxInclusive ? "含税" : "不含税"}}</div>
+		</div>
+	</div>
+
+	<table class="inqtable">
+	<tr>
+		<td width="80">运费总额</td><td width="400" ng-bind="inq.TotalSum + ' 元'"></td>
+		<td width="80">合同订金</td><td ng-bind="inq.Deposit + ' 元'"></td>
+	</tr>
+	<tr>
+		<td>现场服务</td><td ng-bind="inq.NeedAgent ? '需要' : '不需要'"></td>
+		<td>包装方式</td><td ng-bind="inq.PackageMethodText"></td>
+	</tr>
+	<tr>
+		<td width="80">支付手段</td><td class="color-orange" ng-bind="inq.NeedOnlinePay==1 ? '线上支付' : '线下支付'"></td>
+		<td width="80">付款方式</td><td ng-bind="inq.PaymentMethodText"></td>
+	</tr>
+	</table>
+
+	<div class="inqstate" ng-if="inq.State == STATE.DEPOSIT || inq.State == STATE.REFUND">
+		<div class="float-left center" style="padding-top:5px;width:75px">
+			<i class="glyphicon glyphicon-usd font-32px color-green"></i>
+		</div>
+		<div class="float-left">
+			已付订金：<span ng-bind="inq.Deposit | numberformat:2"></span> 元<br>
+			支付时间：<span ng-bind="inq.DepositDate | dateformat:'yyyy-MM-dd HH:mm:ss'"></span><br>
+		</div>
+	</div>
+
+	<table class="inqtable">
+	<tr>
+		<td width="80">运单状态</td><td width="400"><b class="color-{{inq.StateColor}}" ng-bind="inq.StateText"></b></td>
+		<td width="80">接单时间</td><td ng-bind="inq.OrderDate | dateformat:'yyyy-MM-dd HH:mm'"></td>
+	</tr>
+	<tr>
+		<td>下单用户</td><td ng-bind="inq.CreateUserName"></td>
+		<td>修改时间</td><td ng-bind="inq.UpdateDate | dateformat:'yyyy-MM-dd HH:mm'"></td>
+	</tr>
+	<tr>
+		<td>完成时间</td><td ng-bind="inq.DoneDate | dateformat:'yyyy-MM-dd HH:mm'"></td>
+		<td>创建时间</td><td ng-bind="inq.CreateDate | dateformat:'yyyy-MM-dd HH:mm'"></td>
+	<tr>
+	</table>
+
+	<div class="inquserbox">
+		<ul class="float-left">
+			<li>货主：<span ng-bind="inq.SupplyUserName"></span></li>
+			<li>电话：<span ng-bind="inq.SupplyUserMobilePhone"></span></li>
+			<li>星级：<span ng-bind="inq.SupplyUserStar  | repeat:'☆'"></span></li>
+		</ul>
+		<ul class="float-right">
+			<li>船主：<span ng-bind="inq.ShipUserName"></span></li>
+			<li>电话：<span ng-bind="inq.ShipUserMobilePhone"></span></li>
+			<li>星级：<span ng-bind="inq.ShipUserStar  | repeat:'☆'"></span></li>
+		</ul>
+	</div>
+
+	<div class="locationbar" ng-click="showLocation()">
+		<span ng-if="inq.Location != '' && inq.Location != null">
+			<div><img src="/images/map.png"></div>
+			<div>位置：<span ng-bind="inq.Location"></span><br>
+				 更新：<span ng-bind="inq.LocationUpdateTime | dateformat:'yyyy-MM-dd HH:mm:ss'"></span>
+			</div>
+		</span>
+		<span ng-if="inq.Location == '' || inq.Location == null">
+			<div style="margin-top:5px;margin-left:10px;"><i class="glyphicon glyphicon-map-marker color-calm font-36px"></i></div>
+			<div style="line-height:50px">等待船主更新位置</div>
+		</span>
+	</div>
+	
+	<table class="inqtable hand">
+	<tr>
+		<td width="80">船舶名称</td><td width="400" ng-bind="inq.ShipName"></td>
+		<td width="80">船舶类型</td><td ng-bind="inq.ShipTypeName"></td>
+	</tr>
+	<tr>
+		<td>ＭＭＳＩ</td><td ng-bind="inq.MMSI"></td>
+		<td>建造日期</td><td ng-bind="inq.MadeDate + ' 年'"></td>
+	</tr>
+	<tr>
+		<td>船　　长</td><td ng-bind="(inq.Long | numberformat:1) + ' 米'"></td>
+		<td>船　　宽</td><td ng-bind="(inq.Width | numberformat:1) + ' 米'"></td>
+	</tr>
+	<tr>
+		<td>型　　深</td><td ng-bind="(inq.Deep | numberformat:1) + ' 米'"></td>
+		<td>仓　　容</td><td ng-bind="(inq.Capacity | numberformat:1:0) + ' 方'"></td>
+	</tr>
+	<tr>
+		<td>满载吃水</td><td ng-bind="(inq.FullDraught | numberformat:1) + ' 米'"></td>
+		<td>空载吃水</td><td ng-bind="(inq.EmptyDraught | numberformat:1) + ' 米'"></td>
+	</tr>
+	<tr>
+		<td>舱口数量</td><td ng-bind="inq.HatchNum + ' 个'"></td>
+		<td>　船籍港</td><td ng-bind="inq.RegistryPort"></td>
+	</tr>
+	</table>
+
+</td></tr></table></div>
+
+<!-- 底栏 -->
+<site-footer></site-footer>
+</body>
+
+<script>
+var item = {# $item #};
+var acc = {# $acc #};
+var bank = {# $bank #};
+var currUser = {# $user #};
+if(currUser.UserType == "CD")	currUser.UserTypeText = "船东";
+if(currUser.UserType == "HZ")	currUser.UserTypeText = "货主";
+if(currUser.UserType == "DL")	currUser.UserTypeText = "代理";
+</script>
+
+</script>
+<!--- ES5兼容库 --->
+<script src="http://cdn.bootcss.com/es5-shim/4.0.5/es5-shim.min.js"></script>
+
+<!--- JQuery --->
+<script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<link  href="http://cdn.bootcss.com/jqueryui/1.11.1/jquery-ui.min.css" rel="stylesheet">
+<script src="http://cdn.bootcss.com/jqueryui/1.10.2/jquery-ui.min.js"></script>
+
+<!--- bootstrap --->
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!--- angularJS --->
+<script src="http://cdn.bootcss.com/angular.js/1.2.2/angular.min.js"></script>
+
+<link href="/css/zh-msg.css" rel="stylesheet">
+<script src="/plugins/JSEncrypt 2.3.1/jsencrypt.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/syzxModule.js"></script>
+<script src="/js/payInquiry.js"></script>
+
+</html>

@@ -1,0 +1,189 @@
+@charset "utf-8";
+*{font-family: "Microsoft YaHei","宋体",Arial,sans-serif;font-size: 14px;line-height: 1.4;}
+*:focus{ outline:none;}
+::-webkit-inner-spin-button { display:none; }
+::-webkit-outer-spin-button { display:none; }
+body { padding:0px; margin:0px;}
+ul,li { padding: 0;margin: 0;list-style-type:none;}
+label {font-weight:normal;}
+a {text-decoration:none; color:#021214; }
+a:hover{text-decoration:none;} 
+a:visited {text-decoration:none;}
+sup {margin-left:3px;color:red;font-family:宋体;}
+select {margin-top:-1px;}
+
+.font-14px { font-size:14px; }
+.font-24px { font-size:24px; }
+.font-36px { font-size:36px; }
+.font-bold {font-weight:bold;}
+
+.hand {cursor:pointer}
+
+.float-left{float:left;}
+.float-right {float:right;}
+.pull-right { position:absolute;right:10px;}
+.pull-left { position:absolute;left:10px;}
+.align-left {text-align:left}
+.align-center {text-align:center}
+.align-right {text-align:right}
+.nowrap {white-space: nowrap;}
+
+#banner{  height:400px; overflow:hidden;position:relative;z-index:0;}
+#banner ul{position: absolute;top: -900px;}
+#banner img {width:100%;height:444px;}
+.hide {visibility:hidden;}
+
+.w50 { width:50px;}
+.w75 { width:75px;}
+.w100 { width:100px;}
+.h10 { height:10px; }
+.h20 { height:20px; }
+.h50 { height:50px; }
+.h80 { height:80px; }
+.h100 { height:100px; }
+.h400 { height:400px; }
+
+.outline-bottom { border-bottom:1px solid #ddd; }
+.border { border:1px solid #b9bfc0; }
+
+.outline { border:1px solid #d0d0d0;}
+.outline-white { border:1px solid #fff;}
+.outline-light { border:1px solid #f0f0f0;}
+.outline-gray { border:1px solid #ddd;}
+.outline-stable { border:1px solid #aaa;}
+.outline-dark { border:1px solid #777; }
+.outline-black { border:1px solid #000;}
+.outline-blue { border:1px solid blue; }
+.outline-navy { border:1px solid navy; }
+.outline-green { border:1px solid green; }
+.outline-yellow { border:1px solid yellow; }
+.outline-orange { border:1px solid #F37D12; }
+.outline-red { border:1px solid red; }
+.outline-calm { border:1px solid #11c1f3; }
+
+.bgcolor-white{ background-color:#fff; }
+.bgcolor-light { background-color:#f0f0f0; }
+.bgcolor-gray { background-color:#ddd; }
+.bgcolor-stable { background-color:#aaa;}
+.bgcolor-dark { background-color:#777; }
+.bgcolor-blue { background-color:blue; }
+.bgcolor-navy { background-color:navy; }
+.bgcolor-green { background-color:green; }
+.bgcolor-yellow { background-color:yellow; }
+.bgcolor-red { background-color:red; }
+.bgcolor-orange { background-color:#F37D12; }
+.bgcolor-calm { background-color:#11c1f3 }
+.bgcolor-contrast {background:#dde8e9}
+
+.color-white { color:white; }
+.color-light { color:#f0f0f0; }
+.color-gray { color:#ddd; }
+.color-stable { color:#aaa; }
+.color-dark { color:#777; }
+.color-black { color:black; }
+.color-green {color:green;}
+.color-yellow {color:yellow;}
+.color-orange { color:#F37D12; }
+.color-red { color:red; }
+.color-blue { color:blue; }
+.color-navy { color:navy; }
+.color-calm { color:#11c1f3 }
+.color-placeholder { color: #aaa;}
+
+.icon-big  {	font-size:24px; }
+.icon-large { font-size:48px; }
+.font-bold {font-weight:bold;}
+.font-8px { font-size:8px; }
+.font-9px { font-size:9px; }
+.font-10px { font-size:10px; }
+.font-14px { font-size:14px; }
+.font-16px { font-size:16px; }
+.font-18px { font-size:18px; }
+.font-20px { font-size:20px; }
+.font-22px { font-size:22px; }
+.font-24px { font-size:24px; }
+.font-28px { font-size:28px; }
+.font-32px { font-size:32px; }
+.font-36px { font-size:36px; }
+.font-48px { font-size:48px; }
+
+.deleted td,.deleted label,.deleted span,.deleted div {text-decoration:line-through;color:red;}
+.datalist { border:1px solid #ddd;width:100%;border-collapse:collapse;}
+.datalist tr { height:36px; }
+.datalist td {padding-left:10px;padding-right:10px;empty-cells:show;}
+.datalist thead td { background:#ddd;text-align:center;font-weight:bold;border-right:1px solid white;}
+.datalist thead td:last-child { border-right:0px;}
+.datalist tbody td {border-right:1px solid #ddd;border-bottom:1px solid #ddd}
+.datalist tbody tr:hover { background:#f7f7f7;}
+.datalist .ok,.datalist .cancel { display:inline-block; width:16px;height:16px;}
+.datalist .ok:before{content:"✔";color:green;font-size:18px;}
+.datalist .cancel:before{content:"✘";color:red;;font-size:18px;}
+.datalist .actmenu {font-size:12px;}
+.datalist .actmenu a {font-size:12px;margin-right:10px}
+
+.btn-default {background:#f7f7f7;border:1px solid #ddd;color:black;}
+
+.color-orange {color:#F63;}
+
+.editform li
+{	height:40px;
+	line-height:40px;
+	list-style-type:none;
+	*border-bottom:1px dotted white;
+}
+.editform label:first-child
+{	display:inline-block;
+	width:80px;
+	margin-left:10px;
+	line-height:40px;
+}
+.editform input[type=text],.editform input[type=number],.editform input[type=password],.editform select
+{
+	width:200px;
+	height:26px;
+	line-height:26px;
+	padding-left:5px;
+	border:1px solid #ddd;
+	border-radius:3px;
+}
+
+/**********************************************/
+
+/********** 港口选择对话框 ************/
+.xzj_dlgport { display:none;position:absolute;left:50%;top:50%;margin:-150px -200px;height:300px;width:400px;border:5px solid #DDD;padding:0px;background:white;z-index:50000;*border-collapse:collapse;}
+.xzj_dlgport td{padding:0px;vertical-align:top;}
+.xzj_dlgport ul{overflow:auto;height:300px;}
+.xzj_dlgport li{line-height:40px;border-bottom:1px dotted #ddd;padding-left:5px;}
+.xzj_dlgport li:hover{background:yellow;padding-left:15px;}
+.xzj_dlgport_curr {background:yellow;}
+.xzj_dlgort_privince {width:100px;background:#f7f7f7; }
+.xzj_dlgport_city { width:150px;background:#fafafa; }
+.xzj_dlgport_port { background:white;}
+
+/************* Inquiry样式整理 **************/
+/* 分页 */
+.page-ul{ margin:0px;float:right;margin-bottom:10px;font-family:宋体; }
+
+.width66{width:66.6%;}
+input[type=checkbox]{width: 16px;height: 16px;}
+
+/*编辑框样式*/
+.contentStyle,.contentStyle p ,.contentStyle label{font-size: 16px;font-family: "宋体","Microsoft YaHei",Arial,sans-serif;}
+.contentStyle > div{margin-bottom: 10px;height:35px;}
+.contentStyle input{height: 35px;border: 1px solid #ddd;border-radius: 3px;}
+.modal-body{padding-left:0px;}
+.modal-body select{height: 33px;}
+/* 船东搜索框*/
+#inputSelect{width: 100%;display: block;}
+#inputSelect ul{position: absolute;top: 35px;right:0;z-index: 111;width: 269px;border: 1px solid #ccc;display: none;}
+#inputSelect li{background-color: #fff;padding: 4px;text-indent: 5px;}
+#inputSelect .inputLiAct{background-color: #ddd;}
+/*添加/编辑中多行文字对齐*/
+.inquiryModal .contentStyle label{width: 115px;}
+.contentStyle label{height:24px;line-height:24px;text-align:justify;display:inline-block;overflow:hidden;vertical-align:top;margin: 6px 8px;}
+.contentStyle label i{display:inline-block;width:100%;height:0;}
+.contentStyle label span{color: red;position: absolute;top: 0;right: 6px;}
+
+.inquiry-btns{float:left;margin-bottom:10px}
+.common-input-group{width: 210px;display: inline-block;vertical-align: middle;}
+.common-input-group .search{width: 150px;}

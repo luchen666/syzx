@@ -1,0 +1,114 @@
+﻿[common]
+;应用配置
+application.modules			= Index,admin,api1.1,api2.0
+application.directory		= APP_PATH "/application/"
+application.bootstrap		= APP_PATH "/application/Bootstrap.php"
+application.library			= APP_PATH "/application/library";
+application.layoutpath		= APP_PATH "/application/view"
+application.cache_config	= 1
+application.view.ext		= "htm"
+
+application.baseUri = ''
+application.dispatcher.defaultModule		= index
+application.dispatcher.defaultController	= home
+application.dispatcher.defaultAction		= index
+
+;网站配置
+site.title					= 水运在线欢迎您
+site.keywords				= "货运,船运,水运,航运"
+site.description			= "水运在线，创建完美交易体验"
+site.shortname				= 水运在线						
+
+site.homerows				= 10						;首页列表显示行数
+site.vcode_length			= 4							;验证码位数
+site.vcode_expired			= 300						;超时时间，单位：秒
+site.vcode_register			= 10						;验证码类型：用户注册
+site.vcode_forgetpwd		= 20						;验证码类型：忘记密码
+
+site.support_telephone		= "400 000 6680"			;支持电话
+site.addsch_mustcertified	= 0							;发船期必须通过身份验证
+site.addsupply_mustcertified= 0							;发货源必须通过身份验证
+
+;APP配置
+app.version_min				= "2.0.0"					;app最小版号，小于此版本提示不能使用，下载更新
+app.version_now				= "2.0.0"					;app最新版本，小于此版本提醒有更新
+app.recommend_rows			= 5							;app首页推荐数
+app.rows_per_page			= 10						;APP列表每页记录数
+app.downurl_android			= "http://www.syzx56.com/download/syzx.apk"						;安卓版下载网址
+app.downurl_ios				= "https://itunes.apple.com/cn/app/qq/id3304240019671?mt=8"		;ios版app store页面
+app.refresh_interval		= 60						;APP数据刷新通知间隔，单位：秒
+
+;短信配置 
+sms.url						= ""						;短信网关
+sms.temp_vcode				= "验证码：%s 请在五分钟内使用。【水运在线】"		;验证码内容模板
+sms.temp_msg				= "%s【水运在线】"			;短信通知内容模板
+
+;安全配置
+
+;限定时间内如果错登超过限定次数，就必须隔一段时间才能继续登录
+security.limitlogintime		= 1				;限定时间内，单位：分钟
+security.limitlogintimes	= 3				;限定次数
+security.logininterval		= 1				;隔多久，单位：分钟
+
+security.accesstokenlifetime= 4				;AccessToken存活时间，单位：小时
+
+;smarty模板配置
+smarty.left_delimiter		= "{# "
+smarty.right_delimiter		= "#}"
+smarty.template_dir			= APP_PATH "/application/views/"
+smarty.compile_dir			= APP_PATH "/cache/"
+smarty.cache_dir			= APP_PATH "/cache/"
+
+;数据库配置
+database.master.host	= 127.0.0.1
+database.master.port	= "3306"
+database.master.charset	= "utf8"
+database.master.dbname	= "ship-app"
+database.master.user	= "shipapp"
+database.master.pwd		= "hBN^eEDxrmNwo5y8"
+
+database.slave.host		= 127.0.0.1
+database.slave.port		= "3306"
+database.slave.charset	= "utf8"
+database.slave.dbname	= "ship-app"
+database.slave.user		= "shipapp"
+database.slave.pwd		= "hBN^eEDxrmNwo5y8"
+
+;开发环境
+[develop : common]
+;errors (see Bootstrap::initErrors)
+application.showErrors		= 1
+application.throwException	= 1 
+
+smarty.caching				= 0
+smarty.cache_lifetime		= 0
+smarty.debugging 			= 1
+
+database.slave.debug		= 1
+database.master.debug		= 1
+
+;生产环境
+[product : common]
+;errors (see Bootstrap::initErrors)
+application.showErrors		= 0
+application.throwException	= 0
+
+smarty.caching				= 1
+smarty.cache_lifetime		= -1
+smarty.debugging 			= 0
+
+database.slave.debug		= 0
+database.master.debug		= 0
+
+[REM]
+;php脚本的扩展名
+application.ext 
+
+;Bootstrap路径
+application.bootstrap 
+
+;在路由中需要忽略的路径前缀
+application.baseUri 
+
+;通过这个属性，可以修改yaf的runtime configure 比如application.system.lowcase_path，但是请注意只有PHP_INI_ALL的配置项才可以在这里被修改，此选项从2.2.0开始引入
+application.system.* 

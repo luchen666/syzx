@@ -1,0 +1,47 @@
+<?php
+/*
+ 穆金秋
+ */
+include_once(MODELS_PATH . "/BaseModel.php");
+
+class Port extends BaseModel
+{
+	//港口
+	public static function getPort()
+	{
+		$sql =  "SELECT	*  FROM  Port WHERE isDeleted=0 ";
+		$rs = ExecSQL($sql);
+		return $rs->AsArray();
+	}
+	//查一个港口
+	public static function getonePort($id)
+    {
+        $sql =  "SELECT	*  FROM  Port WHERE ID = :ID ";
+        $rs = ExecSQL($sql,Array("ID"=>$id));
+        return $rs->AsArray();
+    }
+    //插入
+    public static function insertPort($PortName,$Spell,$ShortSpell,$FirstLetter,$RegionId,$Description)
+    {
+        $sql =  "INSERT INTO Port(PortName,Spell,ShortSpell,FirstLetter,RegionId,Description,CreateDate,UpdateDate)VALUES(:PortName,:Spell,:ShortSpell,:FirstLetter,:RegionId,:Description,now(),now())";
+        $rs = ExecSQL($sql,Array("PortName"=>$PortName,"Spell"=>$Spell,"ShortSpell"=>$ShortSpell,"FirstLetter"=>$FirstLetter,"RegionId"=>$RegionId,"Description"=>$Description));
+        return $rs->AsArray();
+    }
+    //改
+    public static function updatePort($ID,$PortName,$Spell,$ShortSpell,$FirstLetter,$RegionId,$Description)
+    {
+        $sql =  "UPDATE Port SET PortName='$PortName',Spell='$Spell',ShortSpell='$ShortSpell',FirstLetter='$FirstLetter',RegionId='$RegionId',Description='$Description',UpdateDate=now() WHERE ID='$ID'";
+        $rs = ExecSQL($sql);
+        return $rs->AsArray();
+    }
+    //删
+    public static function deletePort($id)
+    {
+        $id=explode(",",$id);
+        $count=count($id);
+        for($i=0;$i<$count;$i++){
+            ExecSQL("UPDATE Port SET IsDeleted = 1 WHERE ID='$id[$i]'");
+        };
+    }
+}
+?>
