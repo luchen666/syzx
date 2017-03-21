@@ -1,5 +1,0 @@
-#文件不存在，就转到index.php
-
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule .* index.php
